@@ -1,5 +1,6 @@
 import numpy as np
 from numba import njit
+from matplotlib.pyplot import get_cmap
 
 
 @njit
@@ -76,3 +77,17 @@ class Electron:
 
     def __repr__(self):
         return self.name
+
+
+def color_enumerate(iterable, start=0, cmap=get_cmap('viridis')):
+    """same functionality as enumerate, but additionally yields sequential colors from
+    a given cmap
+    """
+    n = start
+    try:
+        length = len(iterable)
+    except TypeError:
+        length = len(list(iterable))
+    for item in iterable:
+        yield n, cmap(n/(length-1)), item
+        n += 1
