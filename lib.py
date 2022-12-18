@@ -1,6 +1,7 @@
 import numpy as np
 from numba import njit
 from matplotlib.pyplot import get_cmap
+from tqdm import tqdm
 
 
 @njit
@@ -13,6 +14,8 @@ def solve_trajectory(steps, dt, e_field, b_field, q, m, r, v):
     trajectory[0, 3:] = v
 
     for i in range(1, steps):
+        # boris algorithm
+        # https://en.wikipedia.org/wiki/Particle-in-cell#The_particle_mover
         t = steps * dt
         e = e_field(t, trajectory[i - 1][:3])
         b = b_field(t, trajectory[i - 1][:3])
@@ -29,6 +32,12 @@ def solve_trajectory(steps, dt, e_field, b_field, q, m, r, v):
     return trajectory
 
 
+def shift_trajectories_to_origin(trajectories, origin=(0, 0, 0)):
+    for i in range(3):
+        trajectories[..., i] -= np.min(trajectories[..., i]) + origin[i]
+    return trajectories
+
+
 class Solver:
     trajectories = None
 
@@ -41,8 +50,7 @@ class Solver:
 
     def solve(self):
         self.trajectories = np.empty((len(self.particles), self.steps, 6))
-        for i, particle in enumerate(self.particles):
-            print(f"solving trajectory for {particle}")
+        for i, particle in tqdm(enumerate(self.particles), total=len(self.particles)):
             self.trajectories[i] = solve_trajectory(
                 self.steps,
                 self.dt,
@@ -53,6 +61,9 @@ class Solver:
                 particle.r,
                 particle.v,
             )
+
+    def shift_trajectories(self):
+        self.trajectories = shift_trajectories_to_origin(self.trajectories)
 
 
 class Electron:
@@ -79,7 +90,7 @@ class Electron:
         return self.name
 
 
-def color_enumerate(iterable, start=0, cmap=get_cmap('viridis')):
+def color_enumerate(iterable, start=0, cmap=get_cmap("viridis")):
     """same functionality as enumerate, but additionally yields sequential colors from
     a given cmap
     """
@@ -89,5 +100,14 @@ def color_enumerate(iterable, start=0, cmap=get_cmap('viridis')):
     except TypeError:
         length = len(list(iterable))
     for item in iterable:
-        yield n, cmap(n/(length-1)), item
+        yield n, cmap(n / (length - 1)), item
         n += 1
+
+
+def reverse_sizes(sizes):
+    old_sizes_max = np.max(sizes)
+    dist = old_sizes_max - np.min(sizes)
+    new_sizes = dist - sizes
+    shift = old_sizes_max - np.max(new_sizes)
+    new_sizes += shift
+    return new_sizes
