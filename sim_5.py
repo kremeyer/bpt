@@ -11,11 +11,11 @@ import plotly.express.colors as pcolors
 
 
 def e_field(t, r):
-    return np.array([1/(r[2]+0.1), 0, 0])
+    return np.array([1 / (r[2] + 0.1), 0, 0])
 
 
 def b_field(t, r):
-    return np.array([0, r[1]+1, 0])
+    return np.array([0, r[1] + 1, 0])
 
 
 N = 9

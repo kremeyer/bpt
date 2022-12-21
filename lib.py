@@ -111,9 +111,11 @@ def reverse_sizes(sizes):
     new_sizes += shift
     return new_sizes
 
-def cmap_from_plotly(plotly_cmap, name='plotly_generated'):
+
+def cmap_from_plotly(plotly_cmap, name="plotly_generated"):
     rgb_arr = np.array([rgb_str_to_tuple(rgb) for rgb in plotly_cmap]) / 255
     return LinearSegmentedColormap.from_list(name, rgb_arr)
 
+
 def rgb_str_to_tuple(rgb_str):
-    return tuple((int(match) for match in re.findall(r'\d+', rgb_str)))
+    return tuple((int(match) for match in re.findall(r"\d+", rgb_str)))
