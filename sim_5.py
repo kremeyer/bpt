@@ -78,7 +78,7 @@ f_proj, axs_proj = plt.subplots(2, 3, figsize=(9, 6))
 
 plt_cmap = cmap_from_plotly(CMAP)
 
-step = 1
+step = 237
 for i, c, _ in color_enumerate(electrons, cmap=plt_cmap):
     for idxs in [(0, 1, 2), (1, 2, 0), (2, 0, 1)]:
         sizes = (s.trajectories[i, ::step, idxs[2]] + 1) * 50
