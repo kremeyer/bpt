@@ -1,7 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-from lib import Electron, Solver, color_enumerate, reverse_sizes
+from lib import Electron, Solver, color_enumerate, reverse_sizes, cmap_from_plotly
+import plotly.express.colors as pcolors
 
 
 ################
@@ -14,11 +15,11 @@ def e_field(t, r):
 
 
 def b_field(t, r):
-    return np.array([0, 0, 1])
+    return np.array([0.4, 0, 1])
 
 
-N = 5
-x_starts = np.linspace(-0.2, 0.2, N)
+N = 9
+x_starts = np.linspace(-0.4, 0.2, N)
 y_starts = np.zeros(N)
 z_starts = np.linspace(0.8, 1.2, N)
 vx_starts = np.zeros(N)
@@ -38,7 +39,7 @@ electrons = [
 # SOLVE PHYSICS #
 #################
 
-s = Solver(e_field, b_field, electrons, steps=1.5e3, dt=1e-3)
+s = Solver(e_field, b_field, electrons, steps=3e3, dt=0.5e-3)
 s.solve()
 s.shift_trajectories()
 
@@ -72,11 +73,15 @@ f_3d.tight_layout()
 # projection plot #
 ###################
 
-f_proj, axs_proj = plt.subplots(2, 3, figsize=(6, 4))
+CMAP = pcolors.sequential.Sunsetdark
 
-for i, c, _ in color_enumerate(electrons):
+f_proj, axs_proj = plt.subplots(2, 3, figsize=(9, 6))
+
+plt_cmap = cmap_from_plotly(CMAP)
+
+for i, c, _ in color_enumerate(electrons, cmap=plt_cmap):
     for idxs in [(0, 1, 2), (1, 2, 0), (2, 0, 1)]:
-        sizes = (s.trajectories[i, ::10, idxs[2]] + 0.1) * 50
+        sizes = (s.trajectories[i, ::10, idxs[2]] + 1) * 500
         axs_proj[0, idxs[0]].scatter(
             x=s.trajectories[i, ::10, idxs[0]],
             y=s.trajectories[i, ::10, idxs[1]],

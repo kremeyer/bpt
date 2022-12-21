@@ -14,10 +14,10 @@ def e_field(t, r):
 
 
 def b_field(t, r):
-    return np.array([0, 0, 1])
+    return np.array([1, 0, 1])
 
 
-N = 5
+N = 250
 x_starts = np.linspace(-0.2, 0.2, N)
 y_starts = np.zeros(N)
 z_starts = np.linspace(0.8, 1.2, N)
@@ -72,7 +72,7 @@ f_3d.tight_layout()
 # projection plot #
 ###################
 
-f_proj, axs_proj = plt.subplots(2, 3, figsize=(6, 4))
+f_proj, axs_proj = plt.subplots(2, 3, figsize=(9, 6))
 
 for i, c, _ in color_enumerate(electrons):
     for idxs in [(0, 1, 2), (1, 2, 0), (2, 0, 1)]:

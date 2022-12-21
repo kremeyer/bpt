@@ -1,6 +1,8 @@
+import re
 import numpy as np
 from numba import njit
 from matplotlib.pyplot import get_cmap
+from matplotlib.colors import LinearSegmentedColormap
 from tqdm import tqdm
 
 
@@ -95,10 +97,7 @@ def color_enumerate(iterable, start=0, cmap=get_cmap("viridis")):
     a given cmap
     """
     n = start
-    try:
-        length = len(iterable)
-    except TypeError:
-        length = len(list(iterable))
+    length = len(iterable)
     for item in iterable:
         yield n, cmap(n / (length - 1)), item
         n += 1
@@ -111,3 +110,10 @@ def reverse_sizes(sizes):
     shift = old_sizes_max - np.max(new_sizes)
     new_sizes += shift
     return new_sizes
+
+def cmap_from_plotly(plotly_cmap, name='plotly_generated'):
+    rgb_arr = np.array([rgb_str_to_tuple(rgb) for rgb in plotly_cmap]) / 255
+    return LinearSegmentedColormap.from_list(name, rgb_arr)
+
+def rgb_str_to_tuple(rgb_str):
+    return tuple((int(match) for match in re.findall(r'\d+', rgb_str)))
