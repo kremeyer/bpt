@@ -15,7 +15,7 @@ def e_field(t, r):
 
 
 def b_field(t, r):
-    return np.array([0, 0, -1])
+    return np.array([0, 0, -1 * r[2]])
 
 
 N = 11
@@ -103,7 +103,7 @@ for i, c, _ in color_enumerate(electrons):
 for ax in axs_proj.flatten():
     ax.axis("off")
 
-f_proj.tight_layout()
-f_proj.savefig(__file__.replace(".py", ".png"), dpi=1200)
+# f_proj.tight_layout()
+# f_proj.savefig(__file__.replace(".py", ".png"), dpi=1200)
 
-# plt.show()
+plt.show()

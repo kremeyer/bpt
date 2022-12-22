@@ -98,8 +98,12 @@ for i, c, _ in color_enumerate(electrons, cmap=plt_cmap):
 
 for ax in axs_proj.flatten():
     ax.axis("off")
+    mi, ma = ax.get_xlim()
+    ax.set_xlim(mi - 0.35, ma + 0.35)
+    mi, ma = ax.get_ylim()
+    ax.set_ylim(mi - 0.35, ma + 0.35)
 
 f_proj.tight_layout()
-f_proj.savefig(__file__.replace(".py", ".png"), dpi=1200)
+f_proj.savefig(__file__.replace(".py", ".png"), dpi=2400)
 
 # plt.show()
