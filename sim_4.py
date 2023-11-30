@@ -48,25 +48,25 @@ s.shift_trajectories()
 # 3D plot #
 ###########
 
-f_3d = plt.figure(figsize=(6, 6))
-ax_3d = f_3d.add_subplot(111, projection="3d")
+# f_3d = plt.figure(figsize=(6, 6))
+# ax_3d = f_3d.add_subplot(111, projection="3d")
 
-for i, c, _ in color_enumerate(electrons):
-    ax_3d.scatter(
-        xs=s.trajectories[i, ::10, 0],
-        ys=s.trajectories[i, ::10, 1],
-        zs=s.trajectories[i, ::10, 2],
-        color=c,
-    )
+# for i, c, _ in color_enumerate(electrons):
+#     ax_3d.scatter(
+#         xs=s.trajectories[i, ::10, 0],
+#         ys=s.trajectories[i, ::10, 1],
+#         zs=s.trajectories[i, ::10, 2],
+#         color=c,
+#     )
 
-ax_3d.set_xlabel("x")
-ax_3d.set_ylabel("y")
-ax_3d.set_zlabel("z")
-ax_3d.set_xlim(0, np.max(s.trajectories[..., 0]))
-ax_3d.set_ylim(0, np.max(s.trajectories[..., 1]))
-ax_3d.set_zlim(0, np.max(s.trajectories[..., 2]))
+# ax_3d.set_xlabel("x")
+# ax_3d.set_ylabel("y")
+# ax_3d.set_zlabel("z")
+# ax_3d.set_xlim(0, np.max(s.trajectories[..., 0]))
+# ax_3d.set_ylim(0, np.max(s.trajectories[..., 1]))
+# ax_3d.set_zlim(0, np.max(s.trajectories[..., 2]))
 
-f_3d.tight_layout()
+# f_3d.tight_layout()
 
 
 ###################
@@ -75,7 +75,8 @@ f_3d.tight_layout()
 
 CMAP = pcolors.sequential.Sunsetdark
 
-f_proj, axs_proj = plt.subplots(2, 3, figsize=(9, 6))
+f_proj, axs_proj = plt.subplots(3, 2, figsize=(6, 9))
+axs_proj = axs_proj.T
 
 plt_cmap = cmap_from_plotly(CMAP)
 
@@ -104,6 +105,7 @@ for ax in axs_proj.flatten():
     ax.set_ylim(mi - 0.35, ma + 0.35)
 
 f_proj.tight_layout()
-f_proj.savefig(__file__.replace(".py", ".png"), dpi=2400)
+f_proj.subplots_adjust(wspace=0, hspace=0)
+f_proj.savefig(__file__.replace(".py", ".png"), dpi=1200)
 
 # plt.show()
